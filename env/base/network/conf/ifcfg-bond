@@ -1,0 +1,10 @@
+DEVICE="bond{{ net_bond_vlan }}"
+BOOTPROTO="static"
+NM_CONTROLLED="no"
+ONBOOT=yes
+TYPE=Ethernet
+BONDING_OPTS="{{ net_bond_opts }}"
+IPADDR="{{ ip }}"
+NETMASK="{{ netmask }}"
+IPV6INIT="yes"
+IPV6ADDR="{{ ip6 }}"

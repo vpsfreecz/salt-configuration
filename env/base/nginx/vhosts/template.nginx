@@ -1,0 +1,64 @@
+server {
+	listen          80;
+        server_name     www.{{ vhost }} {{ vhost }};
+
+	return 301 https://{{ vhost }}$request_uri;
+}
+
+{% if ssl %}
+server {
+	listen		443;
+	server_name	www.{{ vhost }};
+
+	ssl                     on;
+        ssl_certificate         /etc/ssl/{{ crt }};
+        ssl_certificate_key     /etc/ssl/{{ crt_key }};
+        
+        ssl_session_timeout     5m;
+        
+        ssl_protocols                   SSLv2 SSLv3 TLSv1;
+        ssl_ciphers                     ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+        ssl_prefer_server_ciphers       on;
+
+	return 301 https://{{ vhost }}$request_uri;
+}
+{% endif %}
+
+server {
+	listen		{% if ssl %}443{% else %}80{% endif %};
+        server_name	{{ vhost }};
+
+	access_log	/var/log/nginx/{{ vhost }}.access.log;
+	error_log	/var/log/nginx/{{ vhost }}.error.log;
+
+	root 	/var/www/{{ fqdn }}/{{ vhost }};
+	index	index.html;
+
+	location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt|htm)$ {
+                access_log      off;
+                log_not_found   off;
+                expires         max;
+        }
+
+	location ~* \.(html|html)$ {
+		expires	30m;
+	}
+
+	location ~* /\.(ht|git|svn) {
+                access_log      off;
+                log_not_found   off;
+                deny            all;
+        }
+
+	{% if ssl %}
+	ssl                     on;
+        ssl_certificate         /etc/ssl/{{ crt }};
+        ssl_certificate_key     /etc/ssl/{{ crt_key }};
+        
+        ssl_session_timeout     5m;
+        
+        ssl_protocols                   SSLv2 SSLv3 TLSv1;
+        ssl_ciphers                     ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+        ssl_prefer_server_ciphers       on;
+	{% endif %}
+}

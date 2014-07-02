@@ -1,0 +1,8 @@
+DEVICE="eth{{ eth }}.{{ vlan }}"
+BOOTPROTO="static"
+NM_CONTROLLED="no"
+ONBOOT=yes
+TYPE=Ethernet
+VLAN="yes"
+SLAVE="yes"
+MASTER="bond{{ vlan }}"

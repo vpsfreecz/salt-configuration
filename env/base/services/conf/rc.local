@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# This script will be executed *after* all the other init scripts.
+# You can put your own initialization stuff in here if you don't
+# want to do the full Sys V style init stuff.
+
+if [ -f /etc/rc.firsttime ]; then
+        /etc/rc.firsttime
+#       rm /etc/rc.firsttime
+fi
+
+MODULES="ppp_async ppp_deflate ppp_mppe tun fuse ip_tables iptable_filter iptable_mangle ipt_limit ipt_multiport ipt_tos ipt_TOS ipt_REJECT ipt_TCPMSS ipt_tcpmss ipt_ttl ipt_LOG ipt_length ip_conntrack ip_conntrack_ftp ip_conntrack_irc ipt_conntrack ipt_state ipt_helper iptable_nat ip_nat_ftp ip_nat_irc ipt_REDIRECT ip6_tables ip6t_rt ip6t_LOG ip6t_ipv6header ip6t_hbh ip6t_frag ip6t_ah ip6table_raw ip6table_mangle ip6table_filter nf_conntrack_ipv6 nf_defrag_ipv6 ip6_queue vzrst ip6t_REJECT ip6table_mangle nf_defrag_ipv6 ipt_hashlimit"
+
+echo "Loading modules..."
+for mod in $MODULES; do
+        modprobe $mod;
+done;
+
+echo "Waiting for network... [hit several keys to interrupt]"
+CHECKIP="172.16.101.1"
+keypress=""
+ping $CHECKIP -c 4 > /dev/null
+while [ ! $? -eq 0 ]; do
+        echo -n ".";
+        ping $CHECKIP -c 1 > /dev/null 2>&1
+        read -n 1 -t 1 keypress
+        if [ "$keypress" != "" ]; then
+            echo " interrupted."
+            break;
+        fi;
+done;
+echo "ok."
+
+echo "Start OpenVZ..."
+/etc/init.d/vz start
+
+echo "vpsAdmin new boot init..."
+/opt/vpsadmin/cron_reboot.php > /var/log/vpsadmin_reboot.log 2>&1
+
+echo "vpsAdmin daemon start..."
+[ -f /var/run/vpsadmin.pid ] && rm /var/run/vpsadmin.pid
+/opt/vpsadmin/daemon.php > /var/log/vpsadmin_daemon.log 2>&1

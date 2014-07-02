@@ -1,0 +1,5 @@
+DEVICE="eth{{ eth }}"
+BOOTPROTO="none"
+NM_CONTROLLED="no"
+ONBOOT=yes
+TYPE=Ethernet

@@ -1,0 +1,5 @@
+[vpsfree]
+name=vpsFree.cz package repository
+baseurl=http://repo.vpsfree.cz/
+enabled=1
+gpgcheck=0
