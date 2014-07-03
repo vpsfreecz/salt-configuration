@@ -7,4 +7,4 @@ BONDING_OPTS="{{ net_bond_opts }}"
 IPADDR="{{ ip }}"
 NETMASK="{{ netmask }}"
 IPV6INIT="yes"
-IPV6ADDR="{{ ip6 }}"
+IPV6ADDR={% if not ip6 %}""{% else %}"{{ ip6 }}"{% endif %}

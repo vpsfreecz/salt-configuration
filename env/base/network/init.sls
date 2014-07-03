@@ -8,9 +8,6 @@
 network:
   service.running:
     - name: network
-    - watch:
-      - file: /etc/sysconfig/network-scripts/ifcfg-eth*
-      - file: /etc/sysconfig/network-scripts/ifcfg-bond*
     - require:
       - pkg: bird
 
@@ -21,9 +18,6 @@ bird:
     - enable: True
     - require:
       - pkg: bird
-    - watch:
-      - file: /etc/bird.conf
-      - file: /etc/bird6.conf
 
 /etc/sysconfig/network:
   file.managed:
