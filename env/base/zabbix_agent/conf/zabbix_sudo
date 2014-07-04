@@ -1,3 +1,4 @@
 Defaults:zabbix !requiretty
 zabbix  ALL=(root)      NOPASSWD:       /sbin/zpool
 zabbix  ALL=(root)      NOPASSWD:       /sbin/zfs
+zabbix  ALL=(root)      NOPASSWD:       /usr/local/bin/vpsadmindctl
