@@ -20,11 +20,6 @@ zpool-vz-cache:
     - name: zpool add -f vz cache {{ pillar[fqdn]['zfs_zpool']['vz_cache']  }}
     - unless: zpool status | grep -Pzo "cache"
 
-zfs-vz-template:
-  cmd.run:
-    - name: zfs create vz/template
-    - unless: zfs list | grep -Pzo "template"
-
 zfs-vz-private:
   cmd.run:
     - name: zfs create vz/private
@@ -53,5 +48,16 @@ zfs-set-atime:
 /vz/dump:
   file.directory
 
-/vz/template/cache:
+/vz/template:
   file.directory
+
+/etc/fstab:
+  file.append:
+    - text:
+      - 172.16.0.5:/storage/vpsfree.cz/template /vz/template nfs vers=3,rw,noatime 0 0
+
+mount-a:
+  cmd.wait:
+    - name: mount -a
+    - watch:
+      - file: /etc/fstab
