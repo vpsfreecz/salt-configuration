@@ -12,12 +12,10 @@ install-spl-zfs:
 kmod-spl:
   pkg.installed:
     - name: kmod-spl-{{ pillar['vzkernel']['version'] }}
-    - version: {{ pillar['vzkernel']['version_spl'] }}.el6
 
 kmod-zfs:
   pkg.installed:
     - name: kmod-zfs-{{ pillar['vzkernel']['version'] }}
-    - version: {{ pillar['vzkernel']['version_zfs'] }}.el6
 
 yum-check-update:
   cmd.wait:
