@@ -1,2 +1,2 @@
 vzkernel:
-  version: '2.6.32-042stab092.3'
+  version: '2.6.32-042stab093.4'
