@@ -35,10 +35,6 @@ munin-node:
   file.managed:
     - source: salt://services/conf/munin-node.conf
 
-/etc/rc.d/rc.local:
-  file.managed:
-    - source: salt://services/conf/rc.local
-
 /etc/crontab:
   file.managed:
     - source: salt://services/conf/crontab
