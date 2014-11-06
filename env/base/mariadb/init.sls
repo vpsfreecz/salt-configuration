@@ -1,6 +1,6 @@
 /etc/yum.repos.d/mariadb.repo:
   file.managed:
-    - souce: salt://mariadb/repo/mariadb.repo
+    - source: salt://mariadb/repo/mariadb.repo
 
 mariadb:
   pkg.installed:
