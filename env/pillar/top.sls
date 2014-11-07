@@ -7,6 +7,7 @@ base:
     - cz_vpsfree_www
     - cz_vpsfree_prg_node1
     - cz_vpsfree_prg_node2
+    - cz_vpsfree_prg_node4
     - cz_vpsfree_prg_node5
     - cz_vpsfree_prg_node6
     - cz_vpsfree_prg_node7
