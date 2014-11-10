@@ -46,7 +46,9 @@ zfs-set-atime:
   file.directory
 
 /vz/dump:
-  file.directory
+  cmd.run:
+    - name: zfs create vz/dump
+    - unless: zfs list | grep -Pzo "dump"
 
 /vz/template:
   file.directory
