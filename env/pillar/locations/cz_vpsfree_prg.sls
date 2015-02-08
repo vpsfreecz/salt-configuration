@@ -1,7 +1,7 @@
 cz_vpsfree_prg:
   root_authorized_keys: ['snajpa', 'aither', 'medved']
   net_bond_vlan: '200'
-  net_bond_opts: 'mode=balance-xor xmit_hash_policy=layer3+4 arp_interval=1000 arp_ip_target=172.16.0.1,172.16.0.2'
+  net_bond_opts: 'mode=balance-xor xmit_hash_policy=layer3+4'
   net_ospf_area: '0.0.0.0'
   net_ospf_networks: ['172.16.0.0/23','172.16.8.0/21','83.167.228.0/25','77.93.223.0/26','77.93.223.64/26','77.93.223.192/26','37.205.9.0/25','37.205.9.128/25']
   net_ospf6_networks: '2a01:430:17::/48'
