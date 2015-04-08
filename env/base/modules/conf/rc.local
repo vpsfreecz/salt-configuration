@@ -22,21 +22,14 @@ keypress=""
 ping $CHECKIP -c 4 > /dev/null
 while [ ! $? -eq 0 ]; do
         echo -n ".";
-        ping $CHECKIP -c 1 > /dev/null 2>&1
         read -n 1 -t 1 keypress
         if [ "$keypress" != "" ]; then
             echo " interrupted."
             break;
         fi;
+        ping $CHECKIP -c 1 > /dev/null 2>&1
 done;
 echo "ok."
 
 echo "Start OpenVZ..."
 /etc/init.d/vz start
-
-echo "vpsAdmin new boot init..."
-/opt/vpsadmin/cron_reboot.php > /var/log/vpsadmin_reboot.log 2>&1
-
-echo "vpsAdmin daemon start..."
-[ -f /var/run/vpsadmin.pid ] && rm /var/run/vpsadmin.pid
-/opt/vpsadmin/daemon.php > /var/log/vpsadmin_daemon.log 2>&1
