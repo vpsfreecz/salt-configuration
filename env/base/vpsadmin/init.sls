@@ -55,26 +55,11 @@ vpsadmindctl:
       ip_addr: {{ pillar[fqdn]['ip_addr'] }}
 
 vpsadmind-service:
-  service.running:
+  service.enabled:
     - name: vpsadmind
-    - enable: True
     - require:
       - git: vpsadmind
       - git: vpsadmindctl
       - file: /etc/vpsadmin/vpsadmind.yml
       - file: /etc/sysconfig/vpsadmind
-    - watch:
-      - file: /etc/vpsadmin/vpsadmind.yml
-      - file: /etc/sysconfig/vpsadmind
 
-vpsadmindctl-install:
-  cmd.run:
-    - name: sleep 10; vpsadmindctl install -p --name {{ '.'.join(grains['fqdn'].split('.')[:2]) }} --role node --location {{ pillar[fqdn]['vpsadmin_location'] }} --addr {{ pillar[fqdn]['ip_addr'] }} --maxvps {{ pillar[fqdn]['vpsadmin_maxvps'] }} --ve-private "/vz/private/%{veid}/private" --fstype {{ pillar[fqdn]['vpsadmin_fstype'] }} --no-propagate --no-generate-configs --no-ssh-key
-
-vpsadmind-restart:
-  cmd.run:
-    - name: service vpsadmind restart; sleep 5
-
-vpsadmindctl-install2:
-  cmd.run:
-    - name: vpsadmindctl install --no-create  --propagate --ssh-key --generate-configs; sleep 15

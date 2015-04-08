@@ -42,6 +42,10 @@ zfs-set-atime:
   cmd.run:
     - name: zfs set atime=off vz
 
+zfs-sharenfs:
+  cmd.run:
+    - name: zfs set sharenfs="rw=@172.16.0.0/23,no_root_squash" vz/private
+
 /vz/lock:
   file.directory
 

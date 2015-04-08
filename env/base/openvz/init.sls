@@ -15,6 +15,10 @@ vz-stop:
     - name: service vz stop
     - onlyif: zpool list | grep "no pools available"
 
+disable-vz:
+  service.disabled:
+    -name: vz
+
 /etc/vz/vz.conf:
   file.managed:
     - source: salt://openvz/conf/vz.conf
