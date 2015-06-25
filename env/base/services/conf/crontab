@@ -14,4 +14,4 @@ HOME=/
 # |  |  |  |  |
 # *  *  *  *  * user-name command to be executed
 
-*/5 * * * *     root    ntpdate ntp.nic.cz > /dev/null 2>&1
+*/5 * * * *     root    ntpdate 0.fedora.pool.ntp.org > /dev/null 2>&1
