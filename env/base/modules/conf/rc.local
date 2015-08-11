@@ -31,5 +31,8 @@ while [ ! $? -eq 0 ]; do
 done;
 echo "ok."
 
+mount /vz/template
+echo "mount vz/template"
+
 echo "Start OpenVZ..."
 /etc/init.d/vz start
