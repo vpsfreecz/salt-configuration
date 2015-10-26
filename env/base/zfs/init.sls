@@ -1,10 +1,5 @@
 {% set fqdn = '_'.join(grains['fqdn'].split('.')|reverse) %}
 
-zfs:
-  service.running:
-    - enable: True
-    - name: zfs
-
 zpool-vz:
   cmd.run:
     - name: zpool create -f vz {{ pillar[fqdn]['zfs_zpool']['vz']  }}
