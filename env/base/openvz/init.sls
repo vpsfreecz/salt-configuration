@@ -17,7 +17,7 @@ vz-stop:
 
 disable-vz:
   service.disabled:
-    -name: vz
+    - name: vz
 
 /etc/vz/vz.conf:
   file.managed:
