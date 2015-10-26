@@ -5,4 +5,3 @@ include:
   - services
   - vpsadmin
   - ssh
-  - zabbix_agent

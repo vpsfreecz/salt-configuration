@@ -34,3 +34,4 @@ install-rpms:
       - vim-enhanced
       - wget
       - ruby
+      - nc
