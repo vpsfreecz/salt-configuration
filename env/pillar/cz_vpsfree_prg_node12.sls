@@ -6,6 +6,6 @@ cz_vpsfree_prg_node12:
   ip_addr: '172.16.0.22'
   ip6_addr: ''
   zfs_zpool:
-    vz: 'mirror sdc sdd mirror sde sdf mirror sdg sdh'
-    vz_log: 'mirror sda2 sdb2'
-    vz_cache: 'sda3 sdb3'
+    vz: 'mirror sda sdb mirror sdc sdd mirror sdg sdh'
+    vz_log: 'mirror sde2 sdf2'
+    vz_cache: 'sde3 sdf3'
