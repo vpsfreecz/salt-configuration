@@ -3,5 +3,4 @@ include:
   - zfs
   - modules
   - services
-  - vpsadmin
   - ssh

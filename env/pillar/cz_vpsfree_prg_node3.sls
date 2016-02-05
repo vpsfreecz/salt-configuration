@@ -1,4 +1,4 @@
-cz_vpsfree_prg_node13:
+cz_vpsfree_prg_node3:
   vpsadmin_server_id: '103'
   vpsadmin_location: 'Praha'
   vpsadmin_maxvps: '75'
