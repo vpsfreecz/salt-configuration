@@ -23,6 +23,10 @@ disable-vz:
   file.managed:
     - source: salt://openvz/conf/vz.conf
 
+/etc/vz/osrelease.conf:
+  file.managed:
+    - source: salt://openvz/conf/osrelease.conf
+
 /etc/vz/conf/ve-basic.conf-sample:
   file.managed:
     - source: salt://openvz/conf/ve-basic.conf-sample
