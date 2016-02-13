@@ -31,8 +31,15 @@ while [ ! $? -eq 0 ]; do
 done;
 echo "ok."
 
+echo "Set system time and hwclock"
+ntpdate 0.fedora.pool.ntp.org && hwclock --systohc
+
+echo "Mount vz/template"
 mount /vz/template
-echo "mount vz/template"
+
+echo "Start vpsAdmind"
+/etc/init.d/vpsadmind start
 
 echo "Start OpenVZ..."
 /etc/init.d/vz start
+
