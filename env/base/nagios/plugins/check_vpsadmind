@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+require 'nagiosplugin'
+
+
+module Nagios
+  module VPSADMIN
+    VERSION = '0.1.1'
+
+    class VpsAdmind
+      def initialize
+        @query = `/usr/bin/sudo /usr/local/bin/vpsadmindctl ping`
+        @query_status_exit = $?.exitstatus
+      end
+
+      def status
+        @query_status_exit
+      end
+    end
+
+    class VpsAdmindCheck < Nagios::Plugin
+      def initialize
+        super
+      end
+
+      def critical?
+        false
+      end
+
+      def warning?
+        vpsadmind.status != 0
+      end
+
+      def ok?
+        true
+      end
+
+      def message
+        if vpsadmind.status != 0
+          "VpsAdmind not running"
+        else
+          "VpsAdmind running"
+        end
+      end
+
+    private
+
+      def vpsadmind
+        @vpsadmind ||= VpsAdmind.new
+      end
+    end
+  end
+end
+
+Nagios::VPSADMIN::VpsAdmindCheck.run!

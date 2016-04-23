@@ -1,0 +1,80 @@
+#!/usr/bin/env ruby
+
+require 'nagiosplugin'
+require 'mixlib/cli'
+
+
+module Nagios
+  module SYSTEM
+    VERSION = '0.1.0'
+
+    class Cpu
+      def initialize
+        @sar_cpu = `/usr/bin/sar | grep all | grep -vi average | tail -1`.split
+      end
+
+      def idle
+        @sar_cpu[7].to_i
+      end
+
+      def result
+        @cpu_result = "CPU Idle = #{@sar_cpu[7].gsub(',', '.')}%|user=#{@sar_cpu[2].gsub(',', '.')};0; nice=#{@sar_cpu[3].gsub(',', '.')};0; system=#{@sar_cpu[4].gsub(',', '.')};0; iowait=#{@sar_cpu[5].gsub(',', '.')};0; steal=#{@sar_cpu[6].gsub(',', '.')};0; idle=#{@sar_cpu[7].gsub(',', '.')};0;"
+      end
+    end
+
+    class CpuPlugin < Nagios::Plugin
+      include Mixlib::CLI
+
+      option :critical,
+        :short => '-c CRITICAL_CAPACITY',
+        :long  => '--critical CRITICAL_CAPACITY',
+        :proc  => Proc.new { |config| config.to_i }
+
+      option :warning,
+        :short => '-w WARNING_CAPACITY',
+        :long  => '--warning WARNING_CAPACITY',
+        :proc  => Proc.new { |config| config.to_i }
+
+      def initialize
+        super
+        parse_options(argv)
+      end
+
+      def critical?
+        if @config[:critical] && @config[:warning]
+          cpu.idle <= config[:critical].to_i
+        else
+          false
+        end
+      end
+
+      def warning?
+        if @config[:critical] && @config[:warning]
+          cpu.idle <= config[:warning].to_i
+        else
+          false
+        end
+      end
+
+      def ok?
+        true
+      end
+
+      def message
+        cpu.result
+      end
+
+    private
+
+      def cpu
+        @cpu ||= Cpu.new
+      end
+
+      def argv
+        ARGV
+      end
+    end
+  end
+end
+
+Nagios::SYSTEM::CpuPlugin.run!

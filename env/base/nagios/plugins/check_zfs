@@ -1,0 +1,105 @@
+#!/usr/bin/env ruby
+
+require 'nagiosplugin'
+require 'mixlib/cli'
+
+
+module Nagios
+  module ZFS
+    VERSION = '0.1.0'
+
+    class Zpool
+      KNOWN_POOL_HEALTHS = %(ONLINE DEGRADED FAULTED)
+
+      attr_reader :name
+
+      def initialize(name)
+        raise 'missing pool name' if [nil, ''].include?(name)
+        @name = name
+      end
+
+      def capacity
+        query.split("\t").last[/^(\d+)/,1].to_i
+      end
+
+      def query
+        @query ||= `sudo zpool list -H -o name,cap #{name}`
+      end
+
+      def health
+        @health ||= `sudo zpool list -H -o health #{name}`.strip
+        raise "unknown health: #{@health}" unless
+          KNOWN_POOL_HEALTHS.include?(@health)
+        @health
+      end
+    end
+
+    class ZpoolCheck < Nagios::Plugin
+      include Mixlib::CLI
+
+      option :zpool,
+        :short => '-p ZPOOL_NAME',
+        :long  => '--pool ZPOOL_NAME',
+        :required => true
+
+      option :critical,
+        :short => '-c CRITICAL_CAPACITY',
+        :long  => '--critical CRITICAL_CAPACITY',
+        :proc  => Proc.new { |config| config.to_i }
+
+      option :warning,
+        :short => '-w WARNING_CAPACITY',
+        :long  => '--warning WARNING_CAPACITY',
+        :proc  => Proc.new { |config| config.to_i }
+
+      def initialize
+        super
+        parse_options(argv)
+      end
+
+      def critical?
+        critical_capacity? || critical_health?
+      end
+
+      def warning?
+        warning_capacity? || warning_health?
+      end
+
+      def ok?
+        true
+      end
+
+      def message
+        "#{zpool.name} #{zpool.health} (#{zpool.capacity}%) | capacity=#{zpool.capacity};#{config[:warning]};#{config[:critical]};0"
+      end
+
+    private
+
+      def critical_capacity?
+        zpool.capacity >= config[:critical]
+      end
+
+      def warning_capacity?
+        zpool.capacity >= config[:warning]
+      end
+
+      def critical_health?
+        zpool.health == 'FAULTED'
+      end
+
+      def warning_health?
+        zpool.health == 'DEGRADED'
+      end
+
+      def zpool
+        @zpool ||= Zpool.new(config[:zpool])
+      end
+
+      def argv
+        ARGV
+      end
+    end
+  end
+end
+
+Nagios::ZFS::ZpoolCheck.run!

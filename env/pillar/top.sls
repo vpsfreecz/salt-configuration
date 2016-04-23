@@ -1,5 +1,6 @@
 base:
   '*':
+    - common
     - vzkernel
     - locations.cz_vpsfree_brq
     - locations.cz_vpsfree_prg

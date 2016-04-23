@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+IP6=$(ip -6 r s | grep default)
+
+if [[ ! -z "$IP6" ]]; then
+    echo 'OK - IPv6 UP'
+    exit 0
+else
+    echo 'CRITICAL - IPv6 DOWN'
+    exit 1
+fi
+

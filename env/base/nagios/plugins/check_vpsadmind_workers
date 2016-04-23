@@ -1,0 +1,183 @@
+#!/usr/bin/env ruby
+
+require 'nagiosplugin'
+
+def is_number? string
+  true if Float(string) rescue false
+end
+
+def int_if_numeric string
+  if is_number? string
+    Integer(string)
+  else
+    string
+  end
+end
+
+def timeout_to_seconds inp
+  if is_number? inp
+    Integer(inp)
+  else
+    last = inp[-1]
+    val = Integer(inp[0..-2])
+    return val * 60 if last == 'm'
+    return val * 60 * 60 if last == 'h'
+    return val * 60 * 60 * 24 if last == 'd'
+    return val * 60 * 60 * 24 * 7 if last == 'w'
+  end
+end
+
+def format_duration(interval)
+  d = interval / 86400
+  h = interval / 3600 % 24
+  m = interval / 60 % 60
+  s = interval % 60
+
+  if d > 0
+    "%d days, %02d:%02d:%02d" % [d, h, m, s]
+  else
+    "%02d:%02d:%02d" % [h, m, s]
+  end
+end
+
+module Nagios
+  module VPSADMIN
+    VERSION = '0.0.1'
+
+    EXE = "vpsadmindctl"
+
+    DEFAULT_ALERT = { "warn" => "1h", "crit" => "1d" }
+    DOWNLOAD_ALERT = { "warn" => "1h", "crit" => 0 }
+    VPS_ALERT = { "warn" => "15m", "crit" => 0 }
+
+    class VpsAdmind
+      def initialize
+        if File.executable? "/usr/local/bin/#{EXE}"
+          @query = `sudo /usr/local/bin/#{EXE} status -pwH`
+        else
+          @query = `./#{EXE} -pwH`
+        end
+        @query_status_exit = $?.exitstatus
+
+        @warn = []
+        @crit = []
+      end
+
+      def status
+        @query_status_exit
+      end
+
+      def timeouts
+        @timeouts_data ||= check_workers
+      end
+
+      def parse_workers
+        header = ["queue", "chain", "trans", "handler",
+                  "type", "time", "pid", "step"]
+
+        out = []
+
+        @query.chomp.lines.each do |line|
+          parts = line.chomp.split(' ', header.length).map { |l| int_if_numeric l }
+          out.push(Hash[header.zip(parts)])
+        end
+        out
+      end
+
+      def check_workers
+        parse_workers.each do |worker|
+          if ! is_number? worker["time"]
+            next
+          end
+
+          if worker["handler"] =~ /Dataset::Download.*/
+            check_timeout!(worker, DOWNLOAD_ALERT)
+          elsif worker["queue"] == "vps"
+            check_timeout!(worker, VPS_ALERT)
+          else
+            check_timeout!(worker, DEFAULT_ALERT)
+          end
+        end
+
+        { "warn" => @warn, "crit" => @crit }
+      end
+
+      def fmt_worker w
+        sprintf('%-8s %-8d %-8d %-20.19s %-5d %8s  %-8s %s',
+                w['queue'], w['chain'], w['trans'], w['handler'],
+                w['type'], format_duration(w['time']), w['pid'], w['step'])
+      end
+
+      def message
+        out = []
+        overview = ""
+
+        if @crit.length > 0
+          overview += "#{@crit.length} CRITICAL "
+          out << "\n\nTIMEOUT CRITICAL:"
+          @crit.each do |w|
+            out << (fmt_worker w)
+          end
+        end
+        if @warn.length > 0
+          overview += "#{@warn.length} TIMEOUT "
+          out << "\n\nTIMEOUT WARNING:"
+          @warn.each do |w|
+            out << (fmt_worker w)
+          end
+        end
+        overview + (out.join "\n")
+      end
+
+      private
+
+        def check_timeout!(worker, timeout)
+          w, c = timeout["warn"], timeout["crit"]
+
+          if c != 0 and worker["time"] >= timeout_to_seconds(c)
+            @crit.push(worker)
+          elsif w != 0 and worker["time"] >= timeout_to_seconds(w)
+            @warn.push(worker)
+          end
+        end
+    end
+
+    class VpsAdmindWorkers < Nagios::Plugin
+      def initialize
+        super
+      end
+
+      def name
+        "VA_WORKERS"
+      end
+
+      def critical?
+        vpsadmind.timeouts["crit"].length > 0
+      end
+
+      def warning?
+        vpsadmind.timeouts["warn"].length > 0
+      end
+
+      def ok?
+        true
+      end
+
+      def message
+        if vpsadmind.status != 0
+          "VpsAdmind not running"
+        else
+          vpsadmind.message
+        end
+      end
+
+    private
+
+      def vpsadmind
+        @vpsadmind ||= VpsAdmind.new
+      end
+    end
+  end
+end
+
+Nagios::VPSADMIN::VpsAdmindWorkers.run!
