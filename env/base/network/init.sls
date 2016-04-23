@@ -1,10 +1,6 @@
 {% set fqdn = '_'.join(grains['fqdn'].split('.')|reverse) %}
 {% set locality = '_'.join(grains['fqdn'].split('.')[1:]|reverse) %}
 
-/lib/modules/{{ pillar['vzkernel']['version'] }}/kernel/drivers/net/e1000e/e1000e.ko:
-  file.managed:
-    - source: salt://network/driver/e1000e.ko
-
 network:
   service.running:
     - name: network
