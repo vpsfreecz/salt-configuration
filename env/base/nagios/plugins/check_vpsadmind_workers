@@ -47,7 +47,7 @@ module Nagios
     EXE = "vpsadmindctl"
 
     DEFAULT_ALERT = { "warn" => "1h", "crit" => "1d" }
-    DOWNLOAD_ALERT = { "warn" => "1h", "crit" => 0 }
+    DOWNLOAD_ALERT = { "warn" => "6h", "crit" => 0 }
     VPS_ALERT = { "warn" => "15m", "crit" => 0 }
 
     class VpsAdmind
