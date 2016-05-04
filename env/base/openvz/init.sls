@@ -27,10 +27,6 @@ disable-vz:
   file.managed:
     - source: salt://openvz/conf/osrelease.conf
 
-/etc/vz/conf/ve-basic.conf-sample:
-  file.managed:
-    - source: salt://openvz/conf/ve-basic.conf-sample
-
 remove-vz:
   cmd.run:
     - name: rm -rf /vz
