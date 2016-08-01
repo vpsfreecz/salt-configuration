@@ -9,8 +9,8 @@ sysctl:
       - file: /etc/sysctl.conf
 
 cpuspeed:
-  service.running:
-    - enable: True
+  service.dead:
+    - enable: False
 
 /etc/kdump.conf:
   file.managed:
