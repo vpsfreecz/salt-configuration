@@ -1,4 +1,5 @@
 include:
+  - abrt
   - openvz
   - zfs
   - modules
