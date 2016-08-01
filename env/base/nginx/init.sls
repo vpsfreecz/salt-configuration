@@ -34,7 +34,7 @@ nginx-vhost-default:
     - require:
       - pkg: nginx
 
-{% for vhost in pillar[fqdn]['nginx_vhosts'] %}
+{% for vhost in pillar[fqdn]['nginx_vhosts'].items() %}
 
 {% set ssl = pillar[fqdn]['nginx_vhosts'][vhost]['ssl'] %}
 {% set crt = pillar[fqdn]['nginx_vhosts'][vhost]['crt'] %}
