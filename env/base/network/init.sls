@@ -117,3 +117,11 @@ bird:
       net_ospf_area: {{ pillar[locality]['net_ospf_area'] }}
       net_ospf_networks: {{ pillar[locality]['net_ospf_networks'] }}
       net_ospf6_networks: {{ pillar[locality]['net_ospf6_networks'] }}
+
+/etc/resolv.conf:
+  file.managed:
+    - source: salt://network/conf/resolv.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - template: jinja
