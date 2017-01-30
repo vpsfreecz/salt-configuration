@@ -1,3 +1,10 @@
+net:
+  ifaces:
+  - eth0
+  - eth1
+#  - eth2
+#  - eth3
+
 nagios:
   std_plugin_dir: /usr/lib64/nagios/plugins/
   ruby_plugin_dir: /usr/lib64/nagios/ruby_plugins/
@@ -18,5 +25,6 @@ nagios:
     - check_mount
     - check_yum
     - check_ipv6
+    - check_vnet
 
 # std matches nagios-plugins-<name> package

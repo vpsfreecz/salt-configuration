@@ -25,7 +25,8 @@ bird:
     - defaults:
       hostname: {{ grains['fqdn'] }}
 
-/etc/sysconfig/network-scripts/ifcfg-eth0:
+{% for iface in pillar['net']['ifaces'] %}
+/etc/sysconfig/network-scripts/ifcfg-{{ iface }}:
   file.managed:
     - source: salt://network/conf/ifcfg-ethx
     - user: root
@@ -33,19 +34,9 @@ bird:
     - mode: 644
     - template: jinja
     - defaults:
-      eth: 0
+      iface: {{ iface }}
 
-/etc/sysconfig/network-scripts/ifcfg-eth1:
-  file.managed:
-    - source: salt://network/conf/ifcfg-ethx
-    - user: root
-    - group: root
-    - mode: 644
-    - template: jinja
-    - defaults:
-      eth: 1
-
-/etc/sysconfig/network-scripts/ifcfg-eth0.{{ pillar[locality]['net_bond_vlan'] }}:
+/etc/sysconfig/network-scripts/ifcfg-{{ iface }}.{{ pillar[locality]['net_bond_vlan'] }}:
   file.managed:
     - source: salt://network/conf/ifcfg-ethx.vlan
     - user: root
@@ -53,19 +44,9 @@ bird:
     - mode: 644
     - template: jinja
     - defaults:
-      eth: 0
+      iface: {{ iface }}
       vlan: {{ pillar[locality]['net_bond_vlan'] }}
-
-/etc/sysconfig/network-scripts/ifcfg-eth1.{{ pillar[locality]['net_bond_vlan'] }}:
-  file.managed:
-    - source: salt://network/conf/ifcfg-ethx.vlan
-    - user: root
-    - group: root
-    - mode: 644
-    - template: jinja
-    - defaults:
-      eth: 1
-      vlan: {{ pillar[locality]['net_bond_vlan'] }}
+{% endfor %}
 
 /etc/modprobe.d/bond{{ pillar[locality]['net_bond_vlan'] }}.conf:
   file.managed:

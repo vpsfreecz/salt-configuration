@@ -1,4 +1,4 @@
-DEVICE="eth{{ eth }}.{{ vlan }}"
+DEVICE="{{ iface }}.{{ vlan }}"
 BOOTPROTO="static"
 NM_CONTROLLED="no"
 ONBOOT=yes

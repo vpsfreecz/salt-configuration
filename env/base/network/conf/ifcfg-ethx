@@ -1,4 +1,4 @@
-DEVICE="eth{{ eth }}"
+DEVICE="{{ iface }}"
 BOOTPROTO="none"
 NM_CONTROLLED="no"
 ONBOOT=yes
