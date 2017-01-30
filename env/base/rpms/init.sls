@@ -6,7 +6,6 @@ install-rpms:
       - bind-utils
       - bridge-utils
       - cpufrequtils
-      - cpuspeed
       - dstat
       - epel-release
       - fuse-sshfs
