@@ -1,7 +1,13 @@
 include:
   - abrt
-  - openvz
-  - zfs
+  - haveged
   - modules
+  - zfs
+  - openvz
   - services
   - ssh
+  - nagios
+  - collectd
+  - mailalias
+  - ntp
+  - crontab
