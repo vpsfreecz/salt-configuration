@@ -1,5 +1,5 @@
 cz_vpsfree_prg:
-  root_authorized_keys: ['snajpa', 'aither', 'medved']
+  root_authorized_keys: ['snajpa', 'aither', 'sorki']
   net_bond_vlan: '200'
   net_bond_opts: 'mode=balance-xor xmit_hash_policy=layer3+4'
   net_ospf_area: '0.0.0.0'
