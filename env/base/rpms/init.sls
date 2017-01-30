@@ -12,6 +12,7 @@ install-rpms:
       - hdparm
       - iftop
       - iotop
+      - ipset
       - lsof
       - man
       - munin-common
