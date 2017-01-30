@@ -35,10 +35,6 @@ munin-node:
   file.managed:
     - source: salt://services/conf/munin-node.conf
 
-/etc/crontab:
-  file.managed:
-    - source: salt://services/conf/crontab
-
 rpcbind:
   service.running:
     - enable: True
