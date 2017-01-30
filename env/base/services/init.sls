@@ -16,11 +16,11 @@ cpuspeed:
   file.managed:
     - source: salt://services/conf/kdump.conf
 
-kdump:
-  service.running:
-    - enable: True
-    - watch:
-      - file: /etc/kdump.conf
+#kdump:
+#  service.running:
+#    - enable: True
+#    - watch:
+#      - file: /etc/kdump.conf
 
 /var/log/munin:
   file.directory:
