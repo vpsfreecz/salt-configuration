@@ -3,6 +3,11 @@
   - source: salt://nagios/conf/nrpe.cfg
   - template: jinja
 
+/etc/sudoers.d/nrpe:
+  file.managed:
+  - source: salt://nagios/conf/sudoers-nrpe
+  - template: jinja
+
 {% for plugin in pillar['nagios']['plugins']['std'] %}
 nagios-plugins-{{ plugin|replace('check_', '') }}:
   pkg.installed

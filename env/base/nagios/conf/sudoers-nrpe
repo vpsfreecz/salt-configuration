@@ -1,0 +1,6 @@
+Defaults:nrpe !requiretty
+nrpe  ALL=(root)      NOPASSWD:       /sbin/zpool
+nrpe  ALL=(root)      NOPASSWD:       /sbin/zfs
+nrpe  ALL=(root)      NOPASSWD:       /usr/local/bin/vpsadmindctl
+nrpe  ALL=(root)      NOPASSWD:       /usr/sbin/vzctl
+nrpe  ALL=(root)      NOPASSWD:       /usr/sbin/vzlist
