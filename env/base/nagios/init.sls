@@ -1,3 +1,18 @@
+nrpe:
+  pkg.installed:
+  - name: nrpe
+
+  service.running:
+  - enable: True
+  - watch:
+    - file: /etc/nrpe.d/nrpe.cfg
+
+nagiosplugin:
+  gem.installed
+
+mixlib-cli:
+  gem.installed
+
 /etc/nrpe.d/nrpe.cfg:
   file.managed:
   - source: salt://nagios/conf/nrpe.cfg
@@ -18,6 +33,7 @@ nagios-plugins-{{ plugin|replace('check_', '') }}:
   file.managed:
    - source: salt://nagios/plugins/{{ plugin }}
    - mode: 755
+   - makedirs: True
 {% endfor %}
 
 {% for plugin in pillar['nagios']['plugins']['other'] %}
@@ -25,4 +41,5 @@ nagios-plugins-{{ plugin|replace('check_', '') }}:
   file.managed:
    - source: salt://nagios/plugins/other/{{ plugin }}
    - mode: 755
-{% endfor %} 
+   - makedirs: True
+{% endfor %}
