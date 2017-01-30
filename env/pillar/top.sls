@@ -19,8 +19,10 @@ base:
     - cz_vpsfree_prg_node11
     - cz_vpsfree_prg_node12
     - cz_vpsfree_prg_node13
+    - cz_vpsfree_prg_node14
     - cz_vpsfree_brq_node1
     - cz_vpsfree_brq_node2
     - cz_vpsfree_brq_node3
+    - cz_vpsfree_brq_node4
     - cz_vpsfree_pgnd_node1
     - cz_vpsfree_pgnd_node2
