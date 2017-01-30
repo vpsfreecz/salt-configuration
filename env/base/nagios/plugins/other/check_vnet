@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+res="$( sudo vzlist -Ho veid 2>&1 | head -n1  )"
+
+if [ "$res" == "Container(s) not found" ]; then
+    echo 'CRITICAL - No containers'
+    exit 1
+fi
+
+timeout 1 sudo vzctl exec "$res" ip a s &> /dev/null
+
+if [ $? != 0 ]; then
+    echo 'CRITICAL - Timed out'
+    exit 1
+fi
+
+echo 'OK'
+exit 0
