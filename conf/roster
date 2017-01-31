@@ -1,0 +1,29 @@
+node1.prg.vpsfree.cz:  172.16.0.10
+node2.prg.vpsfree.cz:  172.16.0.11
+node3.prg.vpsfree.cz:  172.16.0.12
+node4.prg.vpsfree.cz:  172.16.0.13
+node5.prg.vpsfree.cz:  172.16.0.14
+node6.prg.vpsfree.cz:  172.16.0.15
+node7.prg.vpsfree.cz:  172.16.0.17
+node8.prg.vpsfree.cz:  172.16.0.18
+node9.prg.vpsfree.cz:  172.16.0.19
+node10.prg.vpsfree.cz: 172.16.0.20
+node11.prg.vpsfree.cz: 172.16.0.21
+node12.prg.vpsfree.cz: 172.16.0.22
+node13.prg.vpsfree.cz: 172.16.0.23
+node14.prg.vpsfree.cz: 172.16.0.24
+
+node1.pgnd.vpsfree.cz: 172.16.2.10
+# node1.pgnd.vpsfree.cz: 172.16.2.11
+
+node1.brq.vpsfree.cz: 172.19.0.10
+node2.brq.vpsfree.cz: 172.19.0.11
+node3.brq.vpsfree.cz: 172.19.0.12
+node4.brq.vpsfree.cz: 172.19.0.13
+
+nasbox.prg.vpsfree.cz: 172.16.0.6
+backuper.prg.vpsfree.cz: 172.16.0.5
+
+# 1st time setup
+# NODE.prg.vpsfree.cz: 172.16.254.250
+# NODE.brq.vpsfree.cz: 172.19.254.250

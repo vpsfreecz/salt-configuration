@@ -1,0 +1,9 @@
+salt-ssh:
+  max_procs: 30
+  config_dir: ./conf
+  priv: ~/.ssh/vpsfreecz
+  log_file: ./salt.log
+  wipe_ssh: True
+
+salt:
+  config_dir: ./conf
