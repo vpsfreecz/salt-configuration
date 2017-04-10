@@ -12,6 +12,8 @@ Testing for possible changes:
 Bootstrapping new node:
 -----------------------
 
+Make sure virtualization is enabled in BIOS.
+
 Add new entry to `conf/roster`::
 
   NODE.LOC.vpsfree.cz: 172.16.254.254
