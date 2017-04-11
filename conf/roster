@@ -1,7 +1,7 @@
-node1.prg.vpsfree.cz:  172.16.0.10
+#node1.prg.vpsfree.cz:  172.16.0.10
 node2.prg.vpsfree.cz:  172.16.0.11
 node3.prg.vpsfree.cz:  172.16.0.12
-node4.prg.vpsfree.cz:  172.16.0.13
+#node4.prg.vpsfree.cz:  172.16.0.13
 node5.prg.vpsfree.cz:  172.16.0.14
 node6.prg.vpsfree.cz:  172.16.0.15
 node7.prg.vpsfree.cz:  172.16.0.17
@@ -14,9 +14,9 @@ node13.prg.vpsfree.cz: 172.16.0.23
 node14.prg.vpsfree.cz: 172.16.0.24
 
 node1.pgnd.vpsfree.cz: 172.16.2.10
-# node1.pgnd.vpsfree.cz: 172.16.2.11
+node2.pgnd.vpsfree.cz: 172.16.2.11
 
-node1.brq.vpsfree.cz: 172.19.0.10
+#node1.brq.vpsfree.cz: 172.19.0.10
 node2.brq.vpsfree.cz: 172.19.0.11
 node3.brq.vpsfree.cz: 172.19.0.12
 node4.brq.vpsfree.cz: 172.19.0.13
