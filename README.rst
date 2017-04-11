@@ -1,15 +1,20 @@
 salt-configuration
 ==================
 
-Testing for possible changes:
+Testing for possible changes
 -----------------------------
+
+Salt allows running dry runs with `test=True`::
 
 ::
 
   salt-ssh 'node1.pgnd.*' state.apply test=True
 
+  # or for specific part of the state
+  salt-ssh 'NODE.LOC.*' state.apply openvz test=True
 
-Bootstrapping new node:
+
+Bootstrapping new node
 -----------------------
 
 Make sure virtualization is enabled in BIOS.
@@ -37,9 +42,4 @@ and proceed with stage2::
   salt-ssh 'NODE.LOC.*' state.apply cz_vpsfree_stage2
 
 
-Testing changes
----------------
 
-Salt allows running dry runs with `test=True`::
-
-  salt-ssh 'NODE.LOC.*' state.apply cz_vpsfree_stage2 test=True
