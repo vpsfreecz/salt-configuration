@@ -1,1 +1,2 @@
 backup_mode: minion
+backend: requests

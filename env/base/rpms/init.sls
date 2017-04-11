@@ -35,3 +35,4 @@ install-rpms:
       - wget
       - ruby
       - nc
+      - python-requests
