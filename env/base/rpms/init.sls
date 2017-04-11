@@ -36,3 +36,4 @@ install-rpms:
       - ruby
       - nc
       - python-requests
+      - python2-ndg_httpsclient
