@@ -30,5 +30,16 @@ hardware.::
   reboot
   # verify, rinse and repeat
 
+Change temporary entry in `conf/roster` to correct IP address
+and proceed with stage2::
+
   # apply stage2
   salt-ssh 'NODE.LOC.*' state.apply cz_vpsfree_stage2
+
+
+Testing changes
+---------------
+
+Salt allows running dry runs with `test=True`::
+
+  salt-ssh 'NODE.LOC.*' state.apply cz_vpsfree_stage2 test=True
