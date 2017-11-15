@@ -7,14 +7,6 @@ network:
     - require:
       - pkg: bird
 
-bird:
-  pkg.installed:
-    - name: bird
-  service.running:
-    - enable: True
-    - require:
-      - pkg: bird
-
 /etc/sysconfig/network:
   file.managed:
     - source: salt://network/conf/network
@@ -71,33 +63,6 @@ bird:
       ip: {{ pillar[fqdn]['ip_addr'] }}
       ip6: {{ pillar[fqdn]['ip6_addr'] }}
       netmask: {{ pillar[locality]['netmask'] }}
-
-/etc/bird.conf:
-  file.managed:
-    - source: salt://network/conf/bird.conf
-    - user: root
-    - group: root
-    - mode: 644
-    - template: jinja
-    - defaults:
-      net_bond_vlan: {{ pillar[locality]['net_bond_vlan'] }}
-      ip: {{ pillar[fqdn]['ip_addr'] }}
-      net_ospf_area: {{ pillar[locality]['net_ospf_area'] }}
-      net_ospf_networks: {{ pillar[locality]['net_ospf_networks'] }}
-
-/etc/bird6.conf:
-  file.managed:
-    - source: salt://network/conf/bird6.conf
-    - user: root
-    - group: root
-    - mode: 644
-    - template: jinja
-    - defaults:
-      net_bond_vlan: {{ pillar[locality]['net_bond_vlan'] }}
-      ip: {{ pillar[fqdn]['ip_addr'] }}
-      net_ospf_area: {{ pillar[locality]['net_ospf_area'] }}
-      net_ospf_networks: {{ pillar[locality]['net_ospf_networks'] }}
-      net_ospf6_networks: {{ pillar[locality]['net_ospf6_networks'] }}
 
 /etc/resolv.conf:
   file.managed:
