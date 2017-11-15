@@ -37,3 +37,5 @@ install-rpms:
       - nc
       - python-requests
       - python2-ndg_httpsclient
+      - ledmon
+      - gmp-devel
