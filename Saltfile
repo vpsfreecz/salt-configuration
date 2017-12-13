@@ -4,6 +4,7 @@ salt-ssh:
   priv: ~/.ssh/vpsfreecz
   log_file: ./salt.log
   wipe_ssh: True
+  ssh_log_file: ./salt-ssh.log
 
 salt:
   config_dir: ./conf
