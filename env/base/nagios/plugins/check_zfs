@@ -84,7 +84,7 @@ module Nagios
       end
 
       def critical_health?
-        zpool.health == 'FAULTED'
+        zpool.health == 'FAULTED' || zpool.health == 'DEGRADED'
       end
 
       def warning_health?
