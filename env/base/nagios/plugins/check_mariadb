@@ -1,0 +1,129 @@
+#!/usr/bin/env ruby
+
+require 'nagiosplugin'
+require 'mixlib/cli'
+
+def is_number? string
+  true if Float(string) rescue false
+end
+
+module Nagios
+  module MARIASLAVE
+    VERSION = '0.0.1'
+
+    class MariaSlave
+      attr_reader :pwquery
+
+      def initialize(dbuser, pwquery)
+        raise 'missing password subquery' if [nil, ''].include?(pwquery)
+        @query ||= `mysql -h 127.0.0.1 -u #{dbuser} --password=$( #{pwquery} ) -e 'show slave status\\G'`
+      end
+
+      def status
+        if @query.include?("Slave_SQL")
+          0
+        else
+          1
+        end
+      end
+
+      def lag
+        @lag
+      end
+
+      def slave_error
+        err = false
+        @lag = 9999
+        @query.lines.each do |line|
+          parts = line.split(':').map { |l| l.strip }
+          if [ "Slave_SQL_Running", "Slave_IO_Running" ].include?(parts[0])
+            if parts[1] != "Yes"
+              err = true
+            end
+          end
+          if parts[0] == "Seconds_Behind_Master"
+            if is_number? parts[1]
+              @lag = Integer(parts[1])
+            end
+          end
+        end
+        err
+      end
+    end
+
+    class MariaSlaveCheck < Nagios::Plugin
+      include Mixlib::CLI
+      option :lag_warn,
+        :short => '-w SECONDS',
+        :long  => '--warning SECONDS',
+        :proc  => Proc.new { |config| config.to_i },
+        :required => true
+
+      option :lag_crit,
+        :short => '-c SECONDS',
+        :long  => '--critical SECONDS',
+        :proc  => Proc.new { |config| config.to_i },
+        :required => true
+
+      option :svc,
+        :short => '-s SERVICE',
+        :long => '--service SERVICE',
+        :required => true
+
+      def initialize
+        super
+        parse_options(argv)
+      end
+
+      def critical?
+        mariadb.status != 0 || mariadb.slave_error || mariadb.lag >= config[:lag_crit]
+      end
+
+      def warning?
+        mariadb.lag >= config[:lag_warn]
+      end
+
+      def ok?
+        true
+      end
+
+      def message
+        if mariadb.status != 0
+          "Unable to check slave status"
+        else
+          if mariadb.slave_error
+            "Slave not running"
+          else
+            if (mariadb.lag >= config[:lag_warn] || mariadb.lag >= config[:lag_crit])
+              "Slave lagging behind #{mariadb.lag} seconds"
+            else
+              "Slave ok"
+            end
+          end
+        end
+      end
+
+    private
+
+      def mariadb
+        if config[:svc] == "vpsadmin"
+          dbuser = "vpsadmin"
+          pwquery = "grep DB_PASS /etc/vpsadmin/config.php | cut -d\"'\" -f4"
+        elsif config[:svc] == "vpsadmin"
+          dbuser = "root"
+          pwquery = "grep password /etc/icinga2/features-enabled/ido-mysql.conf | cut -d'\"' -f2"
+        else
+          raise "You must supply one of vpsadmin or icinga as -s (svc)"
+        end
+
+        @mariadb ||= MariaSlave.new(dbuser, pwquery)
+      end
+
+      def argv
+        ARGV
+      end
+    end
+  end
+end
+
+Nagios::MARIASLAVE::MariaSlaveCheck.run!
